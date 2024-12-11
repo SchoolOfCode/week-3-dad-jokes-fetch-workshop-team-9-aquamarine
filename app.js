@@ -1,6 +1,6 @@
 // Hardcoded array of joke objects
 // Each joke object has a unique id
-const jokes = [
+/*const jokesList = [
   {
     id: "A1bC2D",
     joke: "My dog used to chase people on a bike a lot. It got so bad I had to take his bike away.",
@@ -53,24 +53,42 @@ const jokes = [
     id: "E1yH6B",
     joke: "What did the grape say when it got stepped on? Nothing, it just let out a little wine!",
   },
-];
+];*/
 
 // Main function to retrieve and display a new joke
-function getAndDisplayNewJoke() {
-  const joke = retrieveJoke();
-  displayJoke(joke);
+async function getAndDisplayNewJoke() {
+  const jokeString = await retrieveJoke();
+  displayJoke(jokeString);
 }
 
 // Function to retrieve a random joke
-function retrieveJoke() {
-  const randomIndex = Math.floor(Math.random() * jokes.length);
-  return jokes[randomIndex];
+// Using a random generator from the array and returning its index
+/*function retrieveJoke() {
+  const randomIndex = Math.floor(Math.random() * jokesList.length);
+  return jokesList[randomIndex];
+}*/
+
+async function retrieveJoke() {
+  try {
+    let dadApi = await fetch("https://icanhazdadjoke.com/", {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+    const data = await dadApi.json();
+    //console.log(data);
+    //console.log(data.joke);
+    return data;
+  } catch {
+    console.error("There was an error!");
+  }
 }
 
 // Function to update the DOM with the provided joke
-function displayJoke(joke) {
-  const jokeElement = document.getElementById("joke");
-  jokeElement.textContent = joke.joke;
+// Pass the joke property from getAndDisplayNewJoke and updates the html Text content with the new joke
+function displayJoke(jokeString) {
+  const jokeElement = document.getElementById("writtenJoke");
+  jokeElement.textContent = jokeString.joke;
 }
 
 // Waits for the DOM to be fully loaded and then displays an initial joke.
